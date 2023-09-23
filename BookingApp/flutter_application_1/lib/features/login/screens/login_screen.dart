@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/common/widgets/custom_button.dart';
 import 'package:flutter_application_1/common/widgets/custom_textfield.dart';
+import 'dart:convert' as convert;
+
+import 'package:http/http.dart' as http;
 
 enum Login { signin, signup }
 
@@ -41,64 +44,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 10),
-            ListTile(
-              tileColor: _login == Login.signup ? Colors.white : Colors.grey,
-              title: const Text(
-                "create account",
-                style: TextStyle(fontWeight: FontWeight.w300),
-              ),
-              leading: Radio(
-                activeColor: Colors.amber,
-                value: Login.signup,
-                groupValue: _login,
-                onChanged: (Login? val) {
-                  setState(() {
-                    _login = val!;
-                  });
-                },
-              ),
-            ),
-            if (_login == Login.signup)
-              Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(8.0),
-                child: Form(
-                  key: _signUpFormKey,
-                  child: Column(
-                    children: [
-                      CustomTextField(
-                        controller: _nameController,
-                        hintText: "name",
-                      ),
-                      CustomButton(
-                        onTap: () {},
-                        text: "submit",
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            const SizedBox(height: 10),
-            ListTile(
-              title: const Text(
-                "sign in to your account",
-                style: TextStyle(fontWeight: FontWeight.w300),
-              ),
-              leading: Radio(
-                activeColor: Colors.amber,
-                value: Login.signin,
-                groupValue: _login,
-                onChanged: (Login? val) {
-                  setState(() {
-                    _login = val!;
-                  });
-                },
-              ),
-            )
+            const SizedBox(height: 50),
+            CustomTextField(controller: _nameController, hintText: "NAME"),
+            const SizedBox(height: 50),
+            CustomButton(
+                text: "LOGIN/SIGNUP",
+                onTap: () {
+                  print(_nameController);
+                  checkLogin(context);
+                })
           ]),
         ),
       ),
     );
   }
+}
+
+void checkLogin(context) async {
+  //var url = Uri.https();
 }
