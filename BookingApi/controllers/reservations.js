@@ -12,13 +12,13 @@ reserveRouter.get('/spots/',async(request,response) => {
     const ret = await Reservation.find({}).populate('spots',{ _id:1,spotnumber:1, available:1})
     }
     catch{}
-    response.json(ret).status(200).send()
+    response.status(200).json(ret).send()
 })
 
 reserveRouter.get('/user/',async(request,response)=>{
     const ret = await User.find({})
 
-    return response.json(ret).status(200).send()
+    return response.status(200).json(ret).send()
 })
 
 /*
@@ -34,7 +34,7 @@ reserveRouter.post('/user/', async(request,response)=>{
 
     if (exist.length > 0){
         console.log(exist)
-        return response.json({error:"Already exists"}).status(208).send()
+        return response.status(208).json({error:"Already exists"}).send()
     }
 
     const newusr = new User({
@@ -43,7 +43,7 @@ reserveRouter.post('/user/', async(request,response)=>{
     })
 
     const usr = await newusr.save()
-    return response.json(usr).status(201).send()
+    return response.status(201).json(usr).send()
     }
 
 catch{
@@ -66,10 +66,10 @@ reserveRouter.post('/user/login/', async(request,response)=>{
     console.log(request.body.user)
 
     if (exist.length > 0){
-        return response.json({id: exist[0]._id}).status(200).send()
+        return response.status(200).json({id: exist[0]._id}).send()
     }
 
-    return response.json({error:"user not found"}).status(400).send()
+    return response.status(400).json({error:"user not found"}).send()
 }
 catch{}
 })
@@ -86,12 +86,12 @@ spotid = "650b0cdef10a4d10e57640b4"
 reserveRouter.post('/reserve/',async(request,response)=>{
     try{
     if (request.body.userid == null || request.body.spotid == null){
-        return response.status(401).json({error:"invalid"}).status(400).send()
+        return response.status(401).json({error:"invalid"}).send()
     }
     const spots = await parkingspot.findById(request.body.spotid)
 
     if (spots.length == 0 || spots.available == false){
-        return response.status(401).json({error:'invalid spot'}).status(400).send()
+        return response.status(401).json({error:'invalid spot'}).send()
     }
 
     var curruser = await User.findById(request.body.userid)
@@ -99,14 +99,14 @@ reserveRouter.post('/reserve/',async(request,response)=>{
         curruser.spotsbooked.push(spots._id)
         curruser.save()
     }else{
-        return response.json({error:"user not found"}).status(400).send()
+        return response.status(401).json({error:"user not found"}).send()
     }
 
     spots.available = false
     spots.bookeduser = curruser._id
 
     const res = await spots.save()
-    return response.json(res).status(200).send()
+    return response.status(200).json(res).send()
 }
 catch{}
 
@@ -126,7 +126,7 @@ reserveRouter.post('/spots/',async(request,response)=>{
     try{
 
     if (request.body.state == null || request.body.area == null || request.body.city == null || request.body.spot == null){
-        return response.status(401).json({error:'invalid'}).status(400).send()
+        return response.status(401).json({error:'invalid'}).send()
     }
 
     
@@ -184,7 +184,7 @@ reserveRouter.delete('/reserve/', async(request,response) =>{
     try{
 
     if (request.body.userid == null || request.body.spotid == null){
-        return response.json({error:"invalid request"}).send()
+        return response.status(400).json({error:"invalid request"}).send()
     }
 
     var curr_user = await User.findById(request.body.userid)
@@ -209,7 +209,7 @@ reserveRouter.delete('/reserve/', async(request,response) =>{
 
 
 
-    return response.status(201).json(changed).send()
+    return response.status(200).json(changed).send()
 }
 catch{}
 })
