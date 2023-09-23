@@ -43,7 +43,7 @@ reserveRouter.post('/user/', async(request,response)=>{
     })
 
     const usr = await newusr.save()
-    return response.status(201).json(usr).send()
+    return response.status(201).json({id: usr._id}).send()
     }
 
 catch{
