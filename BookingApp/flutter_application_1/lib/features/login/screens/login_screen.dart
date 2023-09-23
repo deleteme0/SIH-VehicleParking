@@ -65,5 +65,6 @@ void checkLogin(context, _name) async {
   print(_name.text);
   if (await getUserLogin(_name.text)) {
     print("success");
+    print(getId());
   }
 }
