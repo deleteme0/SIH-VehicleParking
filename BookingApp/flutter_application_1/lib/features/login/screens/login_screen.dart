@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/common/widgets/custom_button.dart';
 import 'package:flutter_application_1/common/widgets/custom_textfield.dart';
+import 'package:flutter_application_1/services/userService.dart';
 import 'dart:convert' as convert;
 
 import 'package:http/http.dart' as http;
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: "LOGIN/SIGNUP",
                 onTap: () {
                   print(_nameController);
-                  checkLogin(context);
+                  checkLogin(context, _nameController);
                 })
           ]),
         ),
@@ -60,6 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-void checkLogin(context) async {
-  //var url = Uri.https();
+void checkLogin(context, _name) async {
+  print(_name.text);
+  if (await getUserLogin(_name.text)) {
+    print("success");
+  }
 }

@@ -61,9 +61,10 @@ user = "name"
 
 reserveRouter.post('/user/login/', async(request,response)=>{
     try{
+
     const exist = await User.find({username: request.body.user})
     console.log(exist)
-    console.log(request.body.user)
+    console.log(request.body)
 
     if (exist.length > 0){
         return response.status(200).json({id: exist[0]._id}).send()
