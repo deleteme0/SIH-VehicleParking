@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/booking-screen.dart';
 import 'package:flutter_application_1/common/widgets/custom_button.dart';
 import 'package:flutter_application_1/common/widgets/custom_textfield.dart';
+import 'package:flutter_application_1/my-spots-screen.dart';
 import 'package:flutter_application_1/services/userService.dart';
 import 'package:flutter_application_1/services/bookingService.dart';
 import 'dart:convert' as convert;
@@ -60,8 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingScreen(),
-                        ));
+                            //builder: (context) => BookingScreen(),
+                            builder: (context) => MySpotsScreen()));
                   }
                 }),
           ]),

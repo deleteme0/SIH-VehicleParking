@@ -62,15 +62,17 @@ user = "name"
 reserveRouter.post('/user/login/', async(request,response)=>{
     try{
 
-    const exist = await User.find({username: request.body.user})
+    const exist = await User.find({username: request.body.user}).populate('spotsbooked',{location:1,code:1,spotnumber:1})
 
     if (exist.length > 0){
-        return response.status(200).json({id: exist[0]._id}).send()
+        return response.status(200).json(exist[0]).send()
     }
 
     return response.status(400).json({error:"user not found"}).send()
 }
-catch{}
+catch{
+    return response.status(400).send()
+}
 })
 
 
@@ -100,9 +102,12 @@ reserveRouter.post('/reserve/',async(request,response)=>{
     }else{
         return response.status(401).json({error:"user not found"}).send()
     }
+    
+    var code =Math.floor(Math.random()*8999+1000)
 
     spots.available = false
     spots.bookeduser = curruser._id
+    spots.code= code;
 
     const res = await spots.save()
     return response.status(200).json(res).send()
@@ -132,7 +137,10 @@ reserveRouter.post('/spots/',async(request,response)=>{
 
     const newspot = new Parkingspot({
         spotnumber: request.body.spot,
-        available: true
+        location: request.body.state +", "+request.body.city+", "+request.body.area,
+        available: true,
+        bookeduser: null,
+        code: null
     })
 
     const savednewspot = await newspot.save()
@@ -201,8 +209,19 @@ reserveRouter.delete('/reserve/', async(request,response) =>{
     const changed = await curr_user.save()
 
     const currspot = await parkingspot.findById(request.body.spotid)
+
+    const starttime = currspot.updatedAt()
+    const now = Date()
+
+    console.log(starttime+" --- that is start")
+    console.log(now+" --- this is now")
+
+
+    
     currspot.available = true
     currspot.bookeduser = null
+    currspot.code = null
+
 
     const trash = await currspot.save()
 

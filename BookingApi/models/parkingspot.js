@@ -9,7 +9,9 @@ const parkingspotSchema = new mongoose.Schema({
     bookeduser: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    code: String,
+    location: String
   })
 
 parkingspotSchema.set('toJSON', {
