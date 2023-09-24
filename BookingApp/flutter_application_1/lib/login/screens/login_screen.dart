@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _signInFormKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   void dispose() {
@@ -52,6 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 50),
             CustomTextField(controller: _nameController, hintText: "NAME"),
+            CustomTextField(
+                controller: _passwordController, hintText: "password"),
+            CustomTextField(controller: _emailController, hintText: "email"),
             const SizedBox(height: 50),
             CustomButton(
                 text: "LOGIN/SIGNUP",

@@ -80,7 +80,8 @@ List<List> getSpotPlaces(String id) {
     if (each["id"].toString() == id) {
       //return each["spots"];
       for (dynamic i in each["spots"]) {
-        ans.add([i["spotnumber"].toString(), i["available"], i["id"]]);
+        ans.add(
+            [i["spotnumber"].toString(), i["available"], i["id"], i["price"]]);
       }
 
       return ans;

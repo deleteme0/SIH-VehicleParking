@@ -11,8 +11,11 @@ const parkingspotSchema = new mongoose.Schema({
         ref: 'User'
     },
     code: String,
+    price: Number,
     location: String
-  })
+  },
+    {timestamps: { createdAt: 'createdDate',updatedAt: 'updatedDate' } }
+  )
 
 parkingspotSchema.set('toJSON', {
   transform: (document, returnedObject) => {

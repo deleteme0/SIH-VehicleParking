@@ -126,7 +126,7 @@ Future<List> getAllBookings() async {
   return myUser.spotsbooked;
 }
 
-void removeBooking(String spotid) async {
+Future<double> removeBooking(String spotid) async {
   try {
     var url = Uri.http(
       "localhost:3001",
@@ -145,8 +145,10 @@ void removeBooking(String spotid) async {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       print("deleted");
+      return data["timetaken"] * data["price"];
     }
   } catch (e) {
     print(e);
   }
+  return -1;
 }

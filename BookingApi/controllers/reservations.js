@@ -9,7 +9,7 @@ const reserveRouter = require('express').Router()
 reserveRouter.get('/spots/',async(request,response) => {
 
     try{
-    const ret = await Reservation.find({}).populate('spots',{ _id:1,spotnumber:1, available:1})
+    const ret = await Reservation.find({}).populate('spots',{ _id:1,spotnumber:1, available:1,price:1})
     response.status(200).json(ret).send()
     }
     catch{}
@@ -124,12 +124,13 @@ state = "TN"
 city = "chennai"
 area = "Anna Nagar"
 spot = "deluxe 001"
+price = 5
 
 */
 reserveRouter.post('/spots/',async(request,response)=>{
     try{
 
-    if (request.body.state == null || request.body.area == null || request.body.city == null || request.body.spot == null){
+    if (request.body.state == null || request.body.area == null || request.body.city == null || request.body.spot == null || request.body.price == null){
         return response.status(401).json({error:'invalid'}).send()
     }
 
@@ -140,7 +141,8 @@ reserveRouter.post('/spots/',async(request,response)=>{
         location: request.body.state +", "+request.body.city+", "+request.body.area,
         available: true,
         bookeduser: null,
-        code: null
+        code: null,
+        price: parseFloat(request.body.price)
     })
 
     const savednewspot = await newspot.save()
@@ -188,7 +190,7 @@ spotid = "650b0cdef10a4d10e57640b4"
 
 */
 reserveRouter.delete('/reserve/', async(request,response) =>{
-    try{
+    
 
     if (request.body.userid == null || request.body.spotid == null){
         return response.status(400).json({error:"invalid request"}).send()
@@ -205,31 +207,32 @@ reserveRouter.delete('/reserve/', async(request,response) =>{
         return true
     }
     )
-
     const changed = await curr_user.save()
 
     const currspot = await parkingspot.findById(request.body.spotid)
 
-    const starttime = currspot.updatedAt()
-    const now = Date()
-
-    console.log(starttime+" --- that is start")
-    console.log(now+" --- this is now")
-
+    
 
     
     currspot.available = true
     currspot.bookeduser = null
     currspot.code = null
-
+    
+    var start_time = currspot.updatedDate
 
     const trash = await currspot.save()
 
+    const end_time = Date()
+
+    const total = new Date(end_time).getTime() -  new Date(start_time).getTime();
+  const hours = ((total)/1000)/3600;
+console.log(hours);
 
 
-    return response.status(200).json(changed).send()
-}
-catch{}
+
+
+    return response.status(200).json({timetaken: hours,price: currspot.price}).send()
+
 })
 
 module.exports = reserveRouter

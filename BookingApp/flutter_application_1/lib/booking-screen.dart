@@ -154,10 +154,15 @@ class _BookingScreenState extends State<BookingScreen> {
     spotEntries.clear();
 
     for (List i in spots) {
+      var op = "";
+      if (i[1] == false) {
+        op = " unavailable";
+      }
+
       spotEntries.add(DropdownMenuItem(
         value: i[2].toString(),
         enabled: i[1],
-        child: Text(i[0].toString()),
+        child: Text("${i[0]}${op}PRICE - ${i[3]}"),
       ));
     }
   }

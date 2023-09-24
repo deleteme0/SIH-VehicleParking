@@ -46,6 +46,7 @@ class _MySpotsScreenState extends State<MySpotsScreen> {
                         onPressed: () async {
                           var trash = await removeReservedSpot(id["id"]);
                           var temp = await getAllBookings();
+                          _showMyDialog(trash);
                           setState(() {
                             Bookings = getBookings();
                           });
@@ -75,8 +76,38 @@ class _MySpotsScreenState extends State<MySpotsScreen> {
     );
   }
 
-  Future<void> removeReservedSpot(String spotid) async {
-    removeBooking(spotid);
+  Future<double> removeReservedSpot(String spotid) async {
+    double price = await removeBooking(spotid);
     print(spotid);
+    await getSpots();
+
+    return price;
+  }
+
+  Future<void> _showMyDialog(double price) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Payment'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("FEE - " + price.toString()),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
