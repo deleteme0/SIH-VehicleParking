@@ -13,12 +13,13 @@ Future<void> getSpots() async {
       "/api/spots/",
     );
 
-    var response = await http.post(url);
+    var response = await http.get(url);
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
       allData = data;
+      print(data);
     }
   } catch (e) {
     print(e);
@@ -39,11 +40,15 @@ List<String> getStates() {
 
 List<String> getCities(String state) {
   List<String> ans = [];
+  int pp = 0;
 
   for (dynamic each in allData) {
-    if (each["state"] == state) {
+    if (each["state"].toString() == state) {
       if (!ans.contains(each["city"])) {
         ans.add(each["city"].toString());
+        print(each["city"]);
+        print(pp);
+        pp++;
       }
     }
   }
@@ -65,12 +70,19 @@ Map<String, String> getAreas(String state, String city) {
   return ans;
 }
 
-List<dynamic> getSpotPlaces(String id) {
+List<List> getSpotPlaces(String id) {
+  List<List> ans = [];
+
   for (dynamic each in allData) {
     if (each["_id"].toString() == id) {
-      return each["spots"];
+      //return each["spots"];
+      for (dynamic i in each["spots"]) {
+        ans.add([i["spotnumber"].toString(), i["available"], i["id"]]);
+      }
+
+      return ans;
     }
   }
 
-  return List<dynamic>.empty();
+  return List<List<String>>.empty();
 }

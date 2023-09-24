@@ -10,9 +10,9 @@ reserveRouter.get('/spots/',async(request,response) => {
 
     try{
     const ret = await Reservation.find({}).populate('spots',{ _id:1,spotnumber:1, available:1})
+    response.status(200).json(ret).send()
     }
     catch{}
-    response.status(200).json(ret).send()
 })
 
 reserveRouter.get('/user/',async(request,response)=>{
